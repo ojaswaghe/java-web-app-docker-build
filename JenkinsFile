@@ -1,7 +1,7 @@
 pipeline {
  agent {
     docker {
-      image 'abhishekf5/maven-abhishek-docker-agent:v1'
+      image 'ojaswaghe/maven-docker-agent:v1'
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
   }
@@ -27,7 +27,7 @@ pipeline {
 
  stage('Build and Push Docker Image') {
       environment {
-        DOCKER_IMAGE = "priya123456/javaapp:${BUILD_NUMBER}"
+        DOCKER_IMAGE = "ojaswaghe/final-javaapp-project-ci:${BUILD_NUMBER}"
         //DOCKERFILE_LOCATION = "./Dockerfile"
         REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
@@ -44,15 +44,15 @@ pipeline {
 
  stage('Update Deployment File') {
         environment {
-            GIT_REPO_NAME = "java-web-app-deployment"
-            GIT_USER_NAME = "priyabuss2004"
+            GIT_REPO_NAME = "Final_CI_CD_project"
+            GIT_USER_NAME = "ojaswaghe"
         }
         steps {
-             git branch: 'main', credentialsId: 'github', url: 'https://github.com/priyabuss2004/java-web-app-deployment.git'
+             git branch: 'main', credentialsId: 'github', url: 'https://github.com/ojaswaghe/Final_CI_CD_project.git'
               withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
-                   git config user.email "priyabuss2004@gmail.com"
-                    git config user.name "priyanka"
+                   git config user.email "ojas.waghe@gmail.com"
+                    git config user.name "ojas"
                     ls -ltr
                     BUILD_NUMBER=${BUILD_NUMBER}
                     sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" deployment.yml
