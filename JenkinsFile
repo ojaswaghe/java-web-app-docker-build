@@ -46,19 +46,20 @@ pipeline {
         environment {
             GIT_REPO_NAME = "Final_CI_CD_project"
             GIT_USER_NAME = "ojaswaghe"
+            APP_NAME = "final-javaapp-project-ci"
         }
         steps {
-             git branch: 'main', credentialsId: 'github', url: 'https://github.com/ojaswaghe/Final_CI_CD_project.git'
-              withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+             git branch: 'main', credentialsId: 'github', url: 'https://github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git'
+              withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
                 sh '''
                    git config user.email "ojas.waghe@gmail.com"
                     git config user.name "ojas"
                     ls -ltr
                     BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/image: {GIT_USER_NAME}*/image: {GIT_USER_NAME}/final-javaapp-project-ci:{BUILD_NUMBER}/g" deployment.yml
+                    sed -i "s/${APP_NAME}.*/${APP_NAME}:${BUILD_NUMBER}/g" deployment.yml
                     git add deployment.yml
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                    git push https:github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                 '''
             }
         }
