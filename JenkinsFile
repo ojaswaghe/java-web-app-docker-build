@@ -47,10 +47,10 @@ pipeline {
             GIT_REPO_NAME = "Final_CI_CD_project"
             GIT_USER_NAME = "ojaswaghe"
             APP_NAME = "final-javaapp-project-ci"
-            GIT_HUB_URL = "https://github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git"
+            GIT_HUB_URL = ""
         }
         steps {
-             git branch: 'main', credentialsId: 'github', url: '${GIT_HUB_URL}'
+             git branch: 'main', credentialsId: 'github', url: 'https://github.com/ojaswaghe/Final_CI_CD_project.git'
               withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
                 sh '''
                    git config user.email "ojas.waghe@gmail.com"
@@ -60,7 +60,7 @@ pipeline {
                     sed -i "s/${APP_NAME}.*/${APP_NAME}:${BUILD_NUMBER}/g" deployment.yml
                     git add deployment.yml
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                    git push ${GIT_HUB_URL} HEAD:main
+                    git push https://github.com/ojaswaghe/Final_CI_CD_project.git HEAD:main
                 '''
             }
         }
