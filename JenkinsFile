@@ -29,7 +29,7 @@ pipeline {
       environment {
         DOCKER_IMAGE = "ojaswaghe/final-javaapp-project-ci:${BUILD_NUMBER}"
         //DOCKERFILE_LOCATION = "./Dockerfile"
-        REGISTRY_CREDENTIALS = credentials('docker-cred')
+        REGISTRY_CREDENTIALS = credentials('Docker')
       }
       steps {
         script {
